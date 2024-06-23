@@ -3,7 +3,7 @@
  */
 export type WorkTag =
   | typeof FunctionComponent
-  | typeof HostComponent
+  | typeof HostRoot
   | typeof HostComponent
   | typeof HostText
 
