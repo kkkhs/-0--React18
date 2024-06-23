@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./packages",
-    "paths": {
-      "@/*": ["*"]
-    },
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -18,7 +14,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "skipLibCheck": true
-  },
-  "include": ["packages"]
+    "skipLibCheck": true,
+    "baseUrl": "./packages",
+    "paths": {
+      "hostConfig": ["./react-reconciler/src/hostConfig.ts"]
+    }
+  }
 }

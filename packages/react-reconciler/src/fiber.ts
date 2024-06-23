@@ -1,9 +1,10 @@
 /**
  * 用来存放 fiberNode 数据结构
  */
-import { Key, Props, Ref } from '@/shared/ReactTypes'
+import { Key, Props, Ref } from 'shared/ReactTypes'
 import { WorkTag } from './workTags'
 import { Flags, NoFlags } from './fiberFlags'
+import { Container } from 'hostConfig'
 
 export class FiberNode {
   type: any
@@ -21,6 +22,7 @@ export class FiberNode {
   memoizedProps: Props | null
   alternate: FiberNode | null
   flags: Flags
+  updateQueue: unknown
 
   constructor(tag: WorkTag, pendingProps: Props, key: Key) {
     // 实例属性
@@ -40,8 +42,22 @@ export class FiberNode {
     // 作为工作单元
     this.pendingProps = pendingProps // 初始的props
     this.memoizedProps = null // 工作完成后的props
+    this.updateQueue = null
 
     this.alternate = null
     this.flags = NoFlags // 副作用
+  }
+}
+
+export class FiberRootNode {
+  container: Container // 保存挂载节点 FiberRootNode
+  current: FiberNode // 指向 hostRootFiber
+  finishedWork: FiberNode | null // 最后递归完成的 fiber
+
+  constructor(container: Container, hostRootFiber: FiberNode) {
+    this.container = container
+    this.current = hostRootFiber
+    hostRootFiber.stateNode = this
+    this.finishedWork = null
   }
 }

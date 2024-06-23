@@ -1,4 +1,4 @@
-import { REACT_ELEMENT_TYPE } from '@/shared/ReactSymbols'
+import { REACT_ELEMENT_TYPE } from 'shared/ReactSymbols'
 import {
   Type,
   Key,
@@ -6,7 +6,7 @@ import {
   Props,
   ElementType,
   ReactElementType,
-} from '@/shared/ReactTypes'
+} from 'shared/ReactTypes'
 
 // ReactElement 构造函数实现
 const ReactElement = function (
