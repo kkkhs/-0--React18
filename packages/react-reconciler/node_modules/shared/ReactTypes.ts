@@ -16,3 +16,6 @@ export interface ReactElementType {
   props: Props
   __mark: string
 }
+
+/** useState支持的两种dispatch参数 */
+export type Action<State> = State | ((prevState: State) => State)
