@@ -1,8 +1,11 @@
-如果觉得不错还请⭐支持一下
 
 我的 [项目文档](https://w0civ51b994.feishu.cn/wiki/E51Qwf8ksiOITWkbaVjcE4ltnDb) 
 
-如果觉得不错还请 star 支持一下，也欢迎在掘金关注我或者关注我的手写 react18 专栏，和我一起手写实现自己的 react18!
+使用 Git Tag 划分迭代步骤，手把手带你实现 React v18 的核心功能。
+
+欢迎「Star ⭐️ 」 和 「Fork」，这是对我最大的鼓励和支持。
+
+欢迎在掘金关注我或者关注我的手写 react18 专栏，和我一起手写实现自己的 react18!
 
 ---
 
