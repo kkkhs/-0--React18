@@ -20,6 +20,7 @@ export class FiberNode {
   index: number
 
   memoizedProps: Props | null
+  memoizedState: any
   alternate: FiberNode | null
   flags: Flags
   updateQueue: unknown
@@ -42,9 +43,10 @@ export class FiberNode {
     // 作为工作单元
     this.pendingProps = pendingProps // 初始的props
     this.memoizedProps = null // 工作完成后的props
+    this.memoizedState = null
     this.updateQueue = null
 
-    this.alternate = null
+    this.alternate = null // 指向节点的备份节点，用于在协调过程中进行比较
     this.flags = NoFlags // 副作用
   }
 }
@@ -60,4 +62,32 @@ export class FiberRootNode {
     hostRootFiber.stateNode = this
     this.finishedWork = null
   }
+}
+
+/** 创建 WorkInProgress*/
+export const createWorkInProgress = (
+  current: FiberNode,
+  pendingProps: Props
+): FiberNode => {
+  let wip = current.alternate
+
+  if (wip === null) {
+    // mount
+    wip = new FiberNode(current.tag, pendingProps, current.key)
+    wip.stateNode = current.stateNode
+
+    wip.alternate = current
+    current.alternate = wip
+  } else {
+    // update
+    wip.pendingProps = pendingProps
+    wip.flags = NoFlags // 清除副作用
+  }
+  wip.type = current.type
+  wip.updateQueue = current.updateQueue
+  wip.children = current.children
+  wip.memoizedProps = current.memoizedProps
+  wip.memoizedState = current.memoizedState
+
+  return wip
 }

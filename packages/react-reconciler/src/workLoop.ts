@@ -4,21 +4,46 @@
 
 import { beginWork } from './beginWork'
 import { completeWork } from './completeWork'
-import { FiberNode } from './fiber'
+import { FiberNode, FiberRootNode, createWorkInProgress } from './fiber'
+import { HostRoot } from './workTags'
 
 /** 指向当前正在工作的 fiberNode */
 let workInProgress: FiberNode | null = null
 
 /** 初始化 */
-function prepareFreshStack(fiber: FiberNode) {
-  workInProgress = fiber
+function prepareFreshStack(root: FiberRootNode) {
+  workInProgress = createWorkInProgress(root.current, {})
+}
+
+/** 实现在 updateContainer后进入wordLoop更新流程 */
+export function scheduleUpdateOnFiber(fiber: FiberNode) {
+  // TODO 调度功能
+  // fiberRootNode 先找到当前触发更新节点的根节点
+  const root = markUpdateFromFiberToRoot(fiber)
+  renderRoot(root)
+}
+
+/** 从当前fiber找到根fiber */
+function markUpdateFromFiberToRoot(fiber: FiberNode) {
+  let node = fiber
+  let parent = node.return
+  while (parent !== null) {
+    // 往上找
+    node = parent
+    parent = node.return
+  }
+
+  if (node.tag === HostRoot) {
+    return node.stateNode
+  }
+  return null
 }
 
 /** reconciler最终执行的方法 */
-function renderRoot(root: FiberNode) {
+function renderRoot(root: FiberRootNode) {
   prepareFreshStack(root)
 
-  // 递归
+  // 开始更新流程: 递归
   do {
     try {
       workLoop()

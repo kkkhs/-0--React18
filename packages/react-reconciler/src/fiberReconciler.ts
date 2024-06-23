@@ -8,6 +8,7 @@ import {
   enqueueUpdate,
 } from './updateQueue'
 import { ReactElementType } from 'shared/ReactTypes'
+import { scheduleUpdateOnFiber } from './workLoop'
 
 export function createContainer(container: Container) {
   // 1.新建 hostRootFiber
@@ -33,6 +34,9 @@ export function updateContainer(
     hostRootFiber.updateQueue as UpdateQueue<ReactElementType | null>,
     update
   )
+
+  // 进入wordLoop更新流程
+  scheduleUpdateOnFiber(hostRootFiber)
 
   return element
 }
