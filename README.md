@@ -13,6 +13,8 @@
 [手写 Mini-Vue3 专栏](https://juejin.cn/column/7383029698114584627)文章列表：
 1. [【从0实现React18】 (一) 项目初始化](https://juejin.cn/post/7382891971897065526)
 2. [【从0实现React18】 (二) JSX 的转换 jsx到底是什么？React是如何把jsx转换为ReactElement?](https://juejin.cn/post/7382890605682196543)
+3. [【从0实现React18】 (三) 初探reconciler 带你初步探寻React的核心逻辑](https://juejin.cn/post/7383342927508373555)
+4. [【从0实现React18】 (四) 如何触发更新 带你了解react触发更新的流程以及更新后如何触发render](https://juejin.cn/spost/7383258697470787634)
 
 ---
 
