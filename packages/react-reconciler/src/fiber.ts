@@ -1,8 +1,8 @@
 /**
  * 用来存放 fiberNode 数据结构
  */
-import { Key, Props, Ref } from 'shared/ReactTypes'
-import { WorkTag } from './workTags'
+import { Key, Props, ReactElementType, Ref } from 'shared/ReactTypes'
+import { FunctionComponent, HostComponent, WorkTag } from './workTags'
 import { Flags, NoFlags } from './fiberFlags'
 import { Container } from 'hostConfig'
 
@@ -16,7 +16,7 @@ export class FiberNode {
 
   return: FiberNode | null
   sibling: FiberNode | null
-  children: FiberNode | null
+  child: FiberNode | null
   index: number
 
   memoizedProps: Props | null
@@ -35,7 +35,7 @@ export class FiberNode {
     //构成树状结构
     this.return = null // 父fiberNode
     this.sibling = null // 兄弟fiberNode
-    this.children = null // 子fiberNode
+    this.child = null // 子fiberNode
     this.index = 0 // 同级fiber的索引
 
     this.ref = null
@@ -85,9 +85,28 @@ export const createWorkInProgress = (
   }
   wip.type = current.type
   wip.updateQueue = current.updateQueue
-  wip.children = current.children
+  wip.child = current.child
   wip.memoizedProps = current.memoizedProps
   wip.memoizedState = current.memoizedState
 
   return wip
+}
+
+/** 根据element创建fiber并返回 */
+export function createFiberFromElement(element: ReactElementType) {
+  const { type, key, props } = element
+
+  let fiberTag: WorkTag = FunctionComponent
+
+  if (typeof type === 'string') {
+    // <div/>  type: 'div'
+    fiberTag = HostComponent
+  } else if (typeof type !== 'function' && __DEV__) {
+    console.warn('未定义的type类型', element)
+  }
+  // 创建 fiber 节点
+  const fiber = new FiberNode(fiberTag, props, key)
+  fiber.type = type
+
+  return fiber
 }
