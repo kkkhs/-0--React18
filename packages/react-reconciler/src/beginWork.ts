@@ -23,6 +23,7 @@ export const beginWork = (wip: FiberNode) => {
       }
       break
   }
+  return null
 }
 
 /** 处理根节点的更新，包括协调处理根节点的属性 以及子节点的更新逻辑 */
