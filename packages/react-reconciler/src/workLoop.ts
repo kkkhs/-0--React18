@@ -3,8 +3,10 @@
  */
 
 import { beginWork } from './beginWork'
+import { CommitMutationEffects } from './comiitWork'
 import { completeWork } from './completeWork'
 import { FiberNode, FiberRootNode, createWorkInProgress } from './fiber'
+import { MutationMask, NoFlags } from './fiberFlags'
 import { HostRoot } from './workTags'
 
 /** 指向当前正在工作的 fiberNode */
@@ -54,11 +56,43 @@ function renderRoot(root: FiberRootNode) {
     }
   } while (true)
 
-  const finishedWord = root.current.alternate
-  root.finishWord = finishedWord
+  const finishedWork = root.current.alternate
+  root.finishedWork = finishedWork
 
-  // wip fiberNode树 树中的 flags
+  // 提交阶段的入口函数
   commitRoot(root)
+}
+
+/** 进入commit阶段 */
+function commitRoot(root: FiberRootNode) {
+  const finishedWork = root.finishedWork
+
+  if (finishedWork === null) {
+    return
+  }
+
+  if (__DEV__) {
+    console.warn('commit阶段开始', finishedWork)
+  }
+
+  // 重置
+  root.finishedWork = null
+
+  // 判断是否存在 3 个子阶段需要执行的操作
+  // 使用 MutationMask 判断是否存在副作用
+  const subtreeHasEffect =
+    (finishedWork.subtreeFlags & MutationMask) !== NoFlags // subtree
+  const rootHasEffects = (finishedWork.flags & MutationMask) !== NoFlags // root
+
+  if (subtreeHasEffect || rootHasEffects) {
+    // 1.beforeMutation
+    // 2.mutation
+    CommitMutationEffects(finishedWork) // 有副作用则进入Mutation阶段
+    root.current = finishedWork // finishedWork 是新生成的 workInProgress 树
+    // 3.layout
+  } else {
+    root.current = finishedWork // 完成 Fiber 树的切换
+  }
 }
 
 function workLoop() {
