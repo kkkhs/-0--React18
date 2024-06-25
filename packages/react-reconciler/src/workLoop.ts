@@ -3,7 +3,7 @@
  */
 
 import { beginWork } from './beginWork'
-import { CommitMutationEffects } from './comiitWork'
+import { CommitMutationEffects } from './commitWork'
 import { completeWork } from './completeWork'
 import { FiberNode, FiberRootNode, createWorkInProgress } from './fiber'
 import { MutationMask, NoFlags } from './fiberFlags'
