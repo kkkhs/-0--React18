@@ -116,6 +116,12 @@ function completeUnitOfWork(fiber: FiberNode) {
 
   do {
     const next = completeWork(node) // 归返回兄弟节点
+
+    if (next !== null) {
+      workInProgress = next
+      return
+    }
+
     const sibling = node.sibling
 
     if (sibling !== null) {
