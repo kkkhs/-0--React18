@@ -1,4 +1,5 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -11,13 +12,14 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false, // 忽略未使用报错
+    "noUnusedParameters": false, // 忽略未使用报错
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "baseUrl": "./packages",
     "paths": {
-      "hostConfig": ["./react-reconciler/src/hostConfig.ts"]
+      // 修改代码检查时的hostConfig指向
+      "hostConfig": ["./react-dom/src/hostConfig.ts"]
     }
   }
 }
