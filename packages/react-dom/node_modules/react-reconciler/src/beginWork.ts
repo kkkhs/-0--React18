@@ -1,8 +1,14 @@
 import { ReactElementType } from 'shared/ReactTypes'
 import { FiberNode } from './fiber'
 import { UpdateQueue, processUpdateQueue } from './updateQueue'
-import { HostComponent, HostRoot, HostText } from './workTags'
+import {
+  FunctionComponent,
+  HostComponent,
+  HostRoot,
+  HostText,
+} from './workTags'
 import { mountChildFibers, reconcileChildFibers } from './childFibers'
+import { renderWithHooks } from './fiberHooks'
 
 /**
  * 递归中的递阶段
@@ -17,6 +23,9 @@ export const beginWork = (wip: FiberNode) => {
       return updateHostComponent(wip)
     case HostText:
       return null
+
+    case FunctionComponent:
+      return updateFunctionComponent(wip)
     default:
       if (__DEV__) {
         console.warn('beginWork为实现的类型', wip)
@@ -24,6 +33,14 @@ export const beginWork = (wip: FiberNode) => {
       break
   }
   return null
+}
+
+/** 处理functionComponent的更新 */
+function updateFunctionComponent(wip: FiberNode) {
+  const nextChildren = renderWithHooks(wip) // 获取FC的子节点
+  reconcileChildren(wip, nextChildren) // 处理子节点更新，可能会递归调用其他协调函数；
+
+  return wip.child
 }
 
 /** 处理根节点的更新，包括协调处理根节点的属性 以及子节点的更新逻辑 */
